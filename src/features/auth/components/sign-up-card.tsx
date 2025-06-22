@@ -12,15 +12,23 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SignInFlow } from "../types";
 import { useState } from "react";
+import { useAuthActions } from "@convex-dev/auth/react";
 
 interface SignUpCardProps {
   setState: (state: SignInFlow) => void;
 }
 
 export const SignUpCard = ({ setState }: SignUpCardProps) => {
+  const { signIn } = useAuthActions();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [pending, setPending] = useState(false);
+
+  const handleProviderSignIn = (value: "github" | "google") => {
+    signIn(value).finally(() => setPending(false));
+  };
 
   return (
     <Card className="w-full h-full p-8">
@@ -33,7 +41,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
       <CardContent className="space-y-5 px-0 pb-0">
         <form className="space-y-2.5">
           <Input
-            disabled={false}
+            disabled={pending}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
@@ -41,7 +49,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
             required
           />
           <Input
-            disabled={false}
+            disabled={pending}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
@@ -49,14 +57,14 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
             required
           />
           <Input
-            disabled={false}
+            disabled={pending}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Confirm password"
             type="password"
             required
           />
-          <Button type="submit" className="w-full" size="lg" disabled={false}>
+          <Button type="submit" className="w-full" size="lg" disabled={pending}>
             Continue
           </Button>
         </form>
@@ -66,8 +74,8 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
             variant="outline"
             className="w-full relative"
             size="lg"
-            disabled={false}
-            onClick={() => {}}
+            disabled={pending}
+            onClick={() => handleProviderSignIn("google")}
           >
             <FcGoogle className="size-5 absolute left-2.5 top-2.5" />
             Continue with Google
@@ -76,8 +84,8 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
             variant="outline"
             className="w-full relative"
             size="lg"
-            disabled={false}
-            onClick={() => {}}
+            disabled={pending}
+            onClick={() => handleProviderSignIn("github")}
           >
             <FaGithub className="size-5 absolute left-2.5 top-2.5" />
             Continue with Github
