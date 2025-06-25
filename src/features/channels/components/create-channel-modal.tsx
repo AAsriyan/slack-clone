@@ -32,8 +32,6 @@ export const CreateChannelModal = () => {
       { name, workspaceId },
       {
         onSuccess: (id) => {
-          if (!id) return;
-
           router.push(`/workspaces/${workspaceId}/channels/${id}`);
           handleClose();
         },
