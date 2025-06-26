@@ -62,14 +62,14 @@ const WorkspacePage = () => {
     member,
   ]);
 
-  if (isLoadingWorkspace || isLoadingChannels)
+  if (isLoadingWorkspace || isLoadingChannels || isLoadingMember)
     return (
       <div className="h-full flex-1 flex flex-col gap-2 items-center justify-center">
         <LoaderIcon className="size-6 animate-spin text-muted-foreground" />
       </div>
     );
 
-  if (!workspace) {
+  if (!workspace || !member) {
     return (
       <div className="h-full flex-1 flex flex-col gap-2 items-center justify-center text-muted-foreground">
         <TriangleAlertIcon className="size-6" />

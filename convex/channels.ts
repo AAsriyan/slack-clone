@@ -58,3 +58,87 @@ export const createChannel = mutation({
     return channelId;
   },
 });
+
+export const getChannelById = query({
+  args: {
+    channelId: v.id("channels"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return null;
+
+    const channel = await ctx.db.get(args.channelId);
+
+    if (!channel) return null;
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) =>
+        q.eq("workspaceId", channel.workspaceId).eq("userId", userId)
+      )
+      .unique();
+
+    if (!member) return null;
+
+    return channel;
+  },
+});
+
+export const updateChannel = mutation({
+  args: {
+    channelId: v.id("channels"),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const { channelId, name } = args;
+
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const channel = await ctx.db.get(channelId);
+    if (!channel) throw new Error("Channel not found");
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) =>
+        q.eq("workspaceId", channel.workspaceId).eq("userId", userId)
+      )
+      .unique();
+
+    if (!member || member.role !== "admin") throw new Error("Unauthorized");
+
+    await ctx.db.patch(channelId, {
+      name,
+    });
+
+    return channelId;
+  },
+});
+
+export const deleteChannel = mutation({
+  args: {
+    channelId: v.id("channels"),
+  },
+  handler: async (ctx, args) => {
+    const { channelId } = args;
+
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Unauthorized");
+
+    const channel = await ctx.db.get(channelId);
+    if (!channel) throw new Error("Channel not found");
+
+    const member = await ctx.db
+      .query("members")
+      .withIndex("by_workspace_id_user_id", (q) =>
+        q.eq("workspaceId", channel.workspaceId).eq("userId", userId)
+      )
+      .unique();
+
+    if (!member || member.role !== "admin") throw new Error("Unauthorized");
+
+    await ctx.db.delete(channelId);
+
+    return channelId;
+  },
+});
