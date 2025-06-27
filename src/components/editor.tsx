@@ -216,31 +216,30 @@ const Editor = ({
             </Hint>
           )}
           {variant === "update" && (
-            <Hint label="Edit">
-              <div className="ml-auto flex items-center gap-x-2">
-                <Button
-                  disabled={disabled}
-                  size="sm"
-                  className="bg-[#007A5A] hover:bg-[#007A5A]/80 text-white"
-                  onClick={onCancel}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  disabled={disabled || isEmpty}
-                  size="sm"
-                  variant="ghost"
-                  onClick={() =>
-                    onSubmit({
-                      body: JSON.stringify(quillRef.current?.getContents()),
-                      image,
-                    })
-                  }
-                >
-                  Save
-                </Button>
-              </div>
-            </Hint>
+            <div className="ml-auto flex items-center gap-x-2">
+              <Button
+                disabled={disabled}
+                size="sm"
+                variant="outline"
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={disabled || isEmpty}
+                size="sm"
+                variant="ghost"
+                className="bg-[#007A5A] hover:bg-[#007A5A]/80 text-white hover:text-white"
+                onClick={() =>
+                  onSubmit({
+                    body: JSON.stringify(quillRef.current?.getContents()),
+                    image,
+                  })
+                }
+              >
+                Save
+              </Button>
+            </div>
           )}
           {variant === "create" && (
             <Hint label="Send">
