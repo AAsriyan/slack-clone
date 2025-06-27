@@ -7,8 +7,9 @@ import { Id } from "../../convex/_generated/dataModel";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { LoaderIcon } from "lucide-react";
+import { ConversationHero } from "./conversation-hero";
 
-const TIME_THRESHOLD = 5;
+export const TIME_THRESHOLD = 5;
 
 interface MessageListProps {
   memberName?: string;
@@ -22,7 +23,7 @@ interface MessageListProps {
   canLoadMore: boolean;
 }
 
-const formatDateLabel = (dateString: string) => {
+export const formatDateLabel = (dateString: string) => {
   const date = new Date(dateString);
   if (isToday(date)) return "Today";
   if (isYesterday(date)) return "Yesterday";
@@ -133,6 +134,9 @@ export const MessageList = ({
       )}
       {variant === "channel" && channelName && channelCreationTime && (
         <ChannelHero name={channelName} creationTime={channelCreationTime} />
+      )}
+      {variant === "conversation" && (
+        <ConversationHero name={memberName} image={memberImage} />
       )}
     </div>
   );
