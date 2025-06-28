@@ -72,7 +72,7 @@ export const Message = ({
   threadName,
   threadTimestamp,
 }: MessageProps) => {
-  const { onOpenMessage, onClose, parentMessageId } = usePanel();
+  const { onOpenMessage, onOpenProfile, onClose, parentMessageId } = usePanel();
   const [ConfirmDialog, confirm] = useConfirm(
     "Delete message",
     "Are you sure you want to delete this message?"
@@ -84,7 +84,8 @@ export const Message = ({
   const { mutate: toggleReaction, isPending: isTogglingReaction } =
     useToggleReaction();
 
-  const isPending = isUpdatingMessage || isDeletingMessage;
+  const isPending =
+    isUpdatingMessage || isDeletingMessage || isTogglingReaction;
 
   const handleReaction = (value: string) => {
     toggleReaction(
@@ -209,7 +210,7 @@ export const Message = ({
         )}
       >
         <div className="flex items-start gap-2">
-          <button>
+          <button onClick={() => onOpenProfile(memberId)}>
             <Avatar>
               <AvatarImage src={authorImage} />
               <AvatarFallback className="bg-sky-500 text-white">
@@ -231,7 +232,7 @@ export const Message = ({
             <div className="flex flex-col w-full overflow-hidden">
               <div className="text-sm">
                 <button
-                  onClick={() => {}}
+                  onClick={() => onOpenProfile(memberId)}
                   className="font-bold text-primary hover:underline"
                 >
                   {authorName}
