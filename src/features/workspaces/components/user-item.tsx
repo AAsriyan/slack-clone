@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Id } from "../../../../convex/_generated/dataModel";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { UserAvatar } from "@/components/user-avatar";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
+import { cn } from "@/lib/utils";
+import { cva, type VariantProps } from "class-variance-authority";
+import Link from "next/link";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 interface UserItemProps {
   id: Id<"members">;
@@ -35,7 +35,6 @@ export const UserItem = ({
   variant = "default",
 }: UserItemProps) => {
   const workspaceId = useWorkspaceId();
-  const avatarFallback = label.charAt(0);
 
   return (
     <Button
@@ -45,12 +44,12 @@ export const UserItem = ({
       asChild
     >
       <Link href={`/workspace/${workspaceId}/member/${id}`}>
-        <Avatar className="size-5 mr-1">
-          <AvatarImage src={image} />
-          <AvatarFallback className="bg-sky-500 text-white">
-            {avatarFallback}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          name={label}
+          image={image}
+          color="sky"
+          className="size-5 mr-1"
+        />
         <span className="text-sm truncate">{label}</span>
       </Link>
     </Button>

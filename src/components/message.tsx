@@ -1,19 +1,19 @@
-import dynamic from "next/dynamic";
-import { Doc, Id } from "../../convex/_generated/dataModel";
+import { useDeleteMessage } from "@/features/messages/api/use-delete-message";
+import { useUpdateMessage } from "@/features/messages/api/use-update-message";
+import { useToggleReaction } from "@/features/reactions/api/use-toggle-reaction";
+import { useConfirm } from "@/hooks/use-confirm";
+import { usePanel } from "@/hooks/use-panel";
+import { cn } from "@/lib/utils";
 import { format, isToday, isYesterday } from "date-fns";
+import dynamic from "next/dynamic";
+import { toast } from "sonner";
+import { Doc, Id } from "../../convex/_generated/dataModel";
 import { Hint } from "./hint";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Reactions } from "./reactions";
+import { ThreadBar } from "./thread-bar";
 import Thumbnail from "./thumbnail";
 import { Toolbar } from "./toolbar";
-import { useUpdateMessage } from "@/features/messages/api/use-update-message";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { useDeleteMessage } from "@/features/messages/api/use-delete-message";
-import { useConfirm } from "@/hooks/use-confirm";
-import { useToggleReaction } from "@/features/reactions/api/use-toggle-reaction";
-import { Reactions } from "./reactions";
-import { usePanel } from "@/hooks/use-panel";
-import { ThreadBar } from "./thread-bar";
+import { UserAvatar } from "./user-avatar";
 
 const Renderer = dynamic(() => import("@/components/renderer"), {
   ssr: false,
@@ -211,12 +211,7 @@ export const Message = ({
       >
         <div className="flex items-start gap-2">
           <button onClick={() => onOpenProfile(memberId)}>
-            <Avatar>
-              <AvatarImage src={authorImage} />
-              <AvatarFallback className="bg-sky-500 text-white">
-                {authorName.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
+            <UserAvatar name={authorName} image={authorImage} color="sky" />
           </button>
           {isEditing ? (
             <div className="w-full h-full">
