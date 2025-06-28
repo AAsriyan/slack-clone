@@ -54,10 +54,8 @@ export const Profile = ({ memberId, onClose }: ProfileProps) => {
     memberId,
   });
 
-  const { mutate: updateMember, isPending: isUpdatingMember } =
-    useUpdateMember();
-  const { mutate: removeMember, isPending: isRemovingMember } =
-    useRemoveMember();
+  const { mutate: updateMember } = useUpdateMember();
+  const { mutate: removeMember } = useRemoveMember();
 
   const handleUpdateMember = async (role: "admin" | "member") => {
     const ok = await confirmUpdate();
